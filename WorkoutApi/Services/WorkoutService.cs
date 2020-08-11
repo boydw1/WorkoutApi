@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WorkoutApi.Models;
 using WorkoutApi.Services.Interfaces;
 
@@ -13,9 +14,9 @@ namespace WorkoutApi.Services
             _dataService = dataService;
         }
 
-        public IEnumerable<Workout> GetWorkouts()
+        public Task<IEnumerable<WorkoutModel>> GetWorkoutsAsync()
         {
-            return _dataService.GetUserWorkouts(); 
+            return _dataService.GetUserWorkoutsAsync();
         }
     }
 }

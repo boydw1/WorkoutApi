@@ -20,9 +20,9 @@ namespace WorkoutApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Workout> Get()
+        public IEnumerable<WorkoutModel> Get()
         {
-            return _workoutService.GetWorkouts();
+            return _workoutService.GetWorkoutsAsync().Result;
         }
     }
 }

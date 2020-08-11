@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using WorkoutApi.Models;
 
 namespace WorkoutApi.Services.Interfaces
 {
     public interface IDataService
     {
-        IEnumerable<Workout> GetUserWorkouts();
+        Task<IEnumerable<WorkoutModel>> GetUserWorkoutsAsync();
     }
 }
