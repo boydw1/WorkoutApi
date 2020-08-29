@@ -16,7 +16,27 @@ namespace WorkoutApi.Services
 
         public Task<IEnumerable<WorkoutModel>> GetWorkoutsAsync()
         {
-            return _dataService.GetUserWorkoutsAsync();
+            return _dataService.GetWorkoutsAsync();
+        }
+
+        public Task<WorkoutModel> GetUserWorkoutAsync(int id)
+        {
+            return _dataService.GetUserWorkoutAsync(id);
+        }
+
+        public void AddUserWorkoutAsync(string title)
+        {
+            _dataService.AddUserWorkoutAsync(title);
+        }
+
+        public void DeleteUserWorkoutAsync(int id)
+        {
+            _dataService.DeleteUserWorkoutAsync(id);
+        }
+
+        public void UpdateUserWorkoutAsync(int id, string editedTitle)
+        {
+            _dataService.UpdateUserWorkoutAsync(id, editedTitle);
         }
     }
 }

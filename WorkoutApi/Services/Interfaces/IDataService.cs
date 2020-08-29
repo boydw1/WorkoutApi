@@ -6,6 +6,11 @@ namespace WorkoutApi.Services.Interfaces
 {
     public interface IDataService
     {
-        Task<IEnumerable<WorkoutModel>> GetUserWorkoutsAsync();
+        Task<IEnumerable<WorkoutModel>> GetWorkoutsAsync();
+        Task<WorkoutModel> GetUserWorkoutAsync(int id);
+
+        Task AddUserWorkoutAsync(string title);
+        Task DeleteUserWorkoutAsync(int id);
+        Task UpdateUserWorkoutAsync(int id, string editedTitle);
     }
-}
+} 

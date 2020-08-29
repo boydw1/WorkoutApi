@@ -24,5 +24,35 @@ namespace WorkoutApi.Controllers
         {
             return _workoutService.GetWorkoutsAsync().Result;
         }
+
+        [HttpGet]
+        public WorkoutModel Get(int id)
+        {
+            return _workoutService.GetUserWorkoutAsync(id).Result;
+        }
+
+        [HttpPost]
+        public IEnumerable<WorkoutModel> Add(string title)
+        {
+             _workoutService.AddUserWorkoutAsync(title);
+
+             return _workoutService.GetWorkoutsAsync().Result;
+        }
+
+        [HttpPost]
+        public IEnumerable<WorkoutModel> Delete(int id)
+        {
+            _workoutService.DeleteUserWorkoutAsync(id);
+
+            return _workoutService.GetWorkoutsAsync().Result;
+        }
+
+        [HttpPost]
+        public IEnumerable<WorkoutModel> Update(int id, string title)
+        {
+            _workoutService.UpdateUserWorkoutAsync(id, title);
+
+            return _workoutService.GetWorkoutsAsync().Result;
+        }
     }
 }
