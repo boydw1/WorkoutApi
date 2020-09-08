@@ -15,7 +15,7 @@ namespace WorkoutApi.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.ApplyConfiguration(new WorkoutMapping());//TODO : right place and order ?
+            builder.ApplyConfiguration(new WorkoutMapping());
             builder.ApplyConfigurationsFromAssembly(typeof(WorkoutApiDbContext).Assembly);
         }
     }

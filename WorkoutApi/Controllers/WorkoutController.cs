@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using WorkoutApi.Models;
+using WorkoutApi.Data.Entities;
 using WorkoutApi.Services.Interfaces;
 
 namespace WorkoutApi.Controllers
@@ -11,48 +12,53 @@ namespace WorkoutApi.Controllers
     public class WorkoutController : ControllerBase
     {
         private readonly ILogger<WorkoutController> _logger;
-        private readonly IWorkoutService _workoutService;
+        private readonly IDataService _dataService;
 
-        public WorkoutController(ILogger<WorkoutController> logger, IWorkoutService workoutService)
+        public WorkoutController(ILogger<WorkoutController> logger, IDataService dataService)
         {
             _logger = logger;
-            _workoutService = workoutService;
+            _dataService = dataService;
         }
 
         [HttpGet]
-        public IEnumerable<WorkoutModel> Get()
-        {
-            return _workoutService.GetWorkoutsAsync().Result;
+        public async Task<IEnumerable<WorkoutEntity>> GetAsync()
+        {   
+            var results = await _dataService.GetWorkoutsAsync();
+
+            return results;
         }
 
-        [HttpGet]
-        public WorkoutModel Get(int id)
+        [HttpGet("{id}")]
+        public async Task<WorkoutEntity> GetAsync(int id)
         {
-            return _workoutService.GetUserWorkoutAsync(id).Result;
+            var results = await _dataService.GetUserWorkoutAsync(id);
+
+            return results;
         }
+
 
         [HttpPost]
-        public IEnumerable<WorkoutModel> Add(string title)
+        public async Task<IEnumerable<WorkoutEntity>> AddAsync(WorkoutEntity workout)
         {
-             _workoutService.AddUserWorkoutAsync(title);
+            await _dataService.AddUserWorkoutAsync(workout);
 
-             return _workoutService.GetWorkoutsAsync().Result;
+            return _dataService.GetWorkoutsAsync().Result;
+        }      
+
+        [HttpDelete]
+        public async Task<IEnumerable<WorkoutEntity>> DeleteAsync(int id)
+        {
+            await _dataService.DeleteUserWorkoutAsync(id);
+
+            return _dataService.GetWorkoutsAsync().Result;
         }
 
-        [HttpPost]
-        public IEnumerable<WorkoutModel> Delete(int id)
+        [HttpPut]
+        public async Task<IEnumerable<WorkoutEntity>> UpdateAsync(WorkoutEntity workout)
         {
-            _workoutService.DeleteUserWorkoutAsync(id);
+            await _dataService.UpdateUserWorkoutAsync(workout);
 
-            return _workoutService.GetWorkoutsAsync().Result;
-        }
-
-        [HttpPost]
-        public IEnumerable<WorkoutModel> Update(int id, string title)
-        {
-            _workoutService.UpdateUserWorkoutAsync(id, title);
-
-            return _workoutService.GetWorkoutsAsync().Result;
+            return _dataService.GetWorkoutsAsync().Result;
         }
     }
 }

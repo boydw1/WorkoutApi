@@ -27,7 +27,7 @@ namespace WorkoutApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<AppConfigurationOptions>(Configuration.GetSection("AppConfiguration"));
-            services.AddScoped<IWorkoutService, WorkoutService>();
+            //services.AddScoped<IWorkoutService, WorkoutService>();
             services.AddScoped<IDataService, DataService>();
 
             services.AddDbContext<WorkoutApiDbContext>(options =>

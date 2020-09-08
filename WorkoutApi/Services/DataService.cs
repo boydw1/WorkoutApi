@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WorkoutApi.Data;
 using WorkoutApi.Data.Entities;
-using WorkoutApi.Models;
 using WorkoutApi.Services.Interfaces;
 
 namespace WorkoutApi.Services
@@ -19,10 +18,10 @@ namespace WorkoutApi.Services
             _dbContext = dbContext;
         }
 
-        public async Task<IEnumerable<WorkoutModel>> GetWorkoutsAsync()
+        public async Task<IEnumerable<WorkoutEntity>> GetWorkoutsAsync()
         {
             var workouts = await _dbContext.Workouts
-                                          .Select(x => new WorkoutModel
+                                          .Select(x => new WorkoutEntity
                                           {
                                               Id = x.Id,
                                               Date = x.Date,
@@ -33,10 +32,10 @@ namespace WorkoutApi.Services
 
         }
 
-        public async Task<WorkoutModel> GetUserWorkoutAsync(int id)
+        public async Task<WorkoutEntity> GetUserWorkoutAsync(int id)
         {
             var workouts = await _dbContext.Workouts
-                .Select(x => new WorkoutModel
+                .Select(x => new WorkoutEntity
                 {
                     Id = x.Id,
                     Date = x.Date,
@@ -47,46 +46,29 @@ namespace WorkoutApi.Services
             return workouts;
         }
 
-        //TODO : LOOK AT ASYNC STUFF and needs etc etc 
-        public async Task AddUserWorkoutAsync(string title)
+        public async Task AddUserWorkoutAsync(WorkoutEntity workout)
         {
-            await _dbContext.Workouts.AddAsync(new WorkoutEntity
-            {
-                Date = DateTime.Now,
-                Title = title
-            });
+            workout.Date = DateTime.Now;
 
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Workouts.Add(workout);
+
+            await _dbContext.SaveChangesAsync();             
         }
 
         public async Task DeleteUserWorkoutAsync(int id)
-        {
-            //TODO : need using ?
-            
-            var workoutEntity = await _dbContext.Workouts.FindAsync(id);
+        {            
+            var workoutEntity =  _dbContext.Workouts.FindAsync(id).Result;
 
-            _dbContext.Workouts.Remove(workoutEntity); // Doesn't contain awaiter ?
+            _dbContext.Workouts.Remove(workoutEntity);
 
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateUserWorkoutAsync(int id, string editedTitle)
-        {
-            //TODO : need using ?
+        public async Task UpdateUserWorkoutAsync(WorkoutEntity workout)
+        {      
+            _dbContext.Workouts.Update(workout);           
 
-            //var workoutEntity = await _dbContext.Workouts.FindAsync(id);
-
-            //workoutEntity.Title = editedTitle;
-
-            var workoutEntity = new WorkoutEntity
-            {
-                Id = id,
-                Title = editedTitle
-            }; // TODO @: Loss of information, date ? need to test 
-
-            _dbContext.Workouts.Update(workoutEntity);
-
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(); 
         }
     }
 }
